@@ -17,25 +17,16 @@ function Calendar(){
 
         useEffect(()=>{
         const dates = [];
-        for(let i = 0; i < 700; i++){
+        for(let i = 0; i < 1401; i++){
             const date = new Date();
-            date.setDate(date.getDate() - 7);
+            date.setDate(date.getDate() - 700);
             dates.push(date);
             date.setDate(date.getDate() + i);
         }
         setDatesList(dates);
     },[]);
 
-    const centerCurrentDate = () => {
-
-        if (!sliderRef.current) return null;
-        
-        const container = sliderRef.current;
-        const containerRect = container.getBoundingClientRect();
-        const centerX = containerRect.left + (containerRect.width / 2);
-        const centerElement = getCenterElement();
-        console.log(centerElement)
-    }
+    
 
     const getCenterElement = () => {
         if (!sliderRef.current) return null;
@@ -61,6 +52,7 @@ function Calendar(){
         });
         setBigMonth(closestElement?.getAttribute('data-month'))
         setBigYear(closestElement?.getAttribute('data-year'))
+        console.log(selectedDate)
         return closestElement;
     };
 
@@ -85,10 +77,12 @@ function Calendar(){
 
     const handleMouseLeave = () => {
         setIsDown(false);
+        centerCurrentDate();
     };
 
     const handleMouseUp = () => {
         setIsDown(false);
+        centerCurrentDate();
     };
 
     const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -97,17 +91,41 @@ function Calendar(){
         const x = e.pageX - (sliderRef.current?.offsetLeft || 0);
         const walk = (x - startX);
         if (sliderRef.current) {
-            sliderRef.current.scrollLeft = scrollLeft - walk;
+            sliderRef.current.scrollLeft = scrollLeft - walk *15;
         }
     };
 
+    const centerCurrentDate = () => {
+
+        if (!sliderRef.current) return null;
+        
+        const container = sliderRef.current;
+        const containerRect = container.getBoundingClientRect();
+        const centerX = containerRect.left + (containerRect.width / 2);
+        const centerElement = getCenterElement();
+        if (!centerElement) return;
+        const rect = centerElement.getBoundingClientRect();
+        const elementCenter = rect.left + (rect.width / 2);
+        const distance = elementCenter - centerX;
+        if (sliderRef.current) {
+            sliderRef.current.scrollLeft += distance;
+        }
+    }
+
     useEffect(() => {
-        console.log('Выбранная дата обновлена:', selectedDate.toLocaleDateString());
-    }, [selectedDate]);
-    
+    if (sliderRef.current && datesList.length > 0) {
+        setTimeout(() => {
+            const container = sliderRef.current;
+            if (container) {
+                container.scrollLeft = (container.scrollWidth - container.clientWidth) / 2;
+                centerCurrentDate()
+            }
+        }, 0);
+    }
+}, [datesList]);
 
     return(
-    <div className="relative w-full h-full"> 
+    <div className="relative w-full min-h-[80vh]"> 
         <div
         ref={sliderRef}
         onMouseDown={handleMouseDown}
@@ -115,7 +133,7 @@ function Calendar(){
         onMouseUp={handleMouseUp}
         onMouseMove={handleMouseMove} 
         onScroll={handleScroll}
-        id="dateSlider" className="w-full h-44 bg-slate-800 rounded-tr-4xl flex overflow-x-auto items-center gap-10 cursor-grab active:cursor-grabbing select-none scrollbar-none"
+        id="dateSlider" className="flex-none w-full h-44 bg-slate-800 rounded-tr-4xl flex overflow-x-auto items-center gap-10 cursor-grab active:cursor-grabbing select-none scrollbar-none"
         >
             {
                 datesList.map((date, index) =>{
@@ -130,13 +148,22 @@ function Calendar(){
         </div>
         <div className="absolute  top-20 left-1/2 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none z-10">
             <div className=" text-center">
-                <div className="text-white w-25 text-3xl font-bold mb-20 px-4 py-2 rounded-2xl">{months[+bigMonth]}</div>
-                <div className='bg-black/60 h-25 w-25 rounded-2xl absolute pointer-events-none top-3/12'></div>
-                <div className="text-white w-25 text-xl mt-4 px-4 py-2 rounded-2xl">{bigYear}</div>
+                <div className="text-white w-25 text-3xl font-bold mb-20 px-4 py-2 rounded-2xl font-mono">{months[+bigMonth]}</div>
+                <div className='bg-black/60 h-25 w-25 rounded-2xl absolute pointer-events-none top-3/12 font-mono'></div>
+                <div className="text-white w-25 text-xl mt-4 px-4 py-2 rounded-2xl font-mono">{bigYear}</div>
             </div>
         </div>
         <p className='text-white'>Выбрана дата: {selectedDate.toLocaleDateString()}</p>
-        <button className='bg-white' onClick={centerCurrentDate}>Center</button>
+        <div className='gap-5 flex flex-col w-full h-100 min-h-[70vh] items-center justify-top pt-5 pb-5 overflow-y-scroll scrollbar-none'>
+            <div className='w-10/12 h-24 bg-slate-800 shrink-0 rounded-3xl '> </div>
+            <div className='w-10/12 h-24 bg-slate-800 shrink-0 rounded-3xl '> </div>
+            <div className='w-10/12 h-24 bg-slate-800 shrink-0 rounded-3xl '> </div>
+            <div className='w-10/12 h-24 bg-slate-800 shrink-0 rounded-3xl '> </div>
+            <div className='w-10/12 h-24 bg-slate-800 shrink-0 rounded-3xl '> </div>
+            <div className='w-10/12 h-24 bg-slate-800 shrink-0 rounded-3xl '> </div>
+            <div className='w-10/12 h-24 bg-slate-800 shrink-0 rounded-3xl '> </div>
+            <div className='w-10/12 h-24 bg-slate-800 shrink-0 rounded-3xl '> </div>
+        </div>
     </div>
     );
 }export default Calendar;
