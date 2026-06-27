@@ -91,7 +91,7 @@ function Calendar(){
         const x = e.pageX - (sliderRef.current?.offsetLeft || 0);
         const walk = (x - startX);
         if (sliderRef.current) {
-            sliderRef.current.scrollLeft = scrollLeft - walk *15;
+            sliderRef.current.scrollLeft = scrollLeft - walk ;
         }
     };
 
@@ -125,7 +125,7 @@ function Calendar(){
 }, [datesList]);
 
     return(
-    <div className="relative w-full min-h-[80vh]"> 
+    <div className="relative w-full min-h-[1vh]"> 
         <div
         ref={sliderRef}
         onMouseDown={handleMouseDown}
@@ -154,7 +154,7 @@ function Calendar(){
             </div>
         </div>
         <p className='text-white'>Выбрана дата: {selectedDate.toLocaleDateString()}</p>
-        <div className='gap-5 flex flex-col w-full h-100 min-h-[70vh] items-center justify-top pt-5 pb-5 overflow-y-scroll scrollbar-none'>
+        {/* <div className='gap-5 flex flex-col w-full h-100 min-h-[70vh] items-center justify-top pt-5 pb-5 overflow-y-scroll scrollbar-none'>
             <div className='w-10/12 h-24 bg-slate-800 shrink-0 rounded-3xl '> </div>
             <div className='w-10/12 h-24 bg-slate-800 shrink-0 rounded-3xl '> </div>
             <div className='w-10/12 h-24 bg-slate-800 shrink-0 rounded-3xl '> </div>
@@ -162,8 +162,8 @@ function Calendar(){
             <div className='w-10/12 h-24 bg-slate-800 shrink-0 rounded-3xl '> </div>
             <div className='w-10/12 h-24 bg-slate-800 shrink-0 rounded-3xl '> </div>
             <div className='w-10/12 h-24 bg-slate-800 shrink-0 rounded-3xl '> </div>
-            <div className='w-10/12 h-24 bg-slate-800 shrink-0 rounded-3xl '> </div>
-        </div>
+            
+        </div> */}
     </div>
     );
 }export default Calendar;

@@ -1,0 +1,18 @@
+import express from 'express'
+
+const router = express.Router();
+
+router.post('/login', (req,res) => {
+
+    res.send('Login endpoint')
+})
+router.post('/register', (req,res) => {
+    
+    res.send('Register endpoint')
+})
+router.post('/logout', (req,res) => {
+
+    res.send('Logout endpoint')
+})
+
+export default router;
